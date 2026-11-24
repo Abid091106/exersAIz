@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { EMPTY_WALLET, DAILY_EARN_CAP, applyEarn, applySpend, applyRefund, earnedTodayOf } from './wallet.js';
+import { EMPTY_WALLET, newWallet, STARTING_TOKENS, DAILY_EARN_CAP, applyEarn, applySpend, applyRefund, earnedTodayOf } from './wallet.js';
 
 const meta = { exercise: 'Squats', sessionId: 's1' };
 const DAY1 = new Date(2026, 10, 24, 18, 0).getTime();
@@ -62,5 +62,14 @@ describe('spend and refund', () => {
     const { w } = earnTimes(EMPTY_WALLET, 5, 2, DAY1);
     expect(w.history).toHaveLength(1);
     expect(w.history[0]).toMatchObject({ reps: 5, amount: 10 });
+  });
+});
+
+describe('welcome bonus', () => {
+  it(`new wallets start with ${STARTING_TOKENS} tokens that don't use up the daily cap`, () => {
+    const w = newWallet(DAY1);
+    expect(w.balance).toBe(STARTING_TOKENS);
+    expect(w.totalEarned).toBe(0);
+    expect(applyEarn(w, 2, meta, DAY1).granted).toBe(2);
   });
 });

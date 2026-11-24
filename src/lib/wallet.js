@@ -6,6 +6,9 @@ const MAX_HISTORY = 100;
 /** Most tokens anyone can earn from exercise in one calendar day. */
 export const DAILY_EARN_CAP = 50;
 
+/** Welcome bonus so new users (and demos) can try the coach and shop straight away. */
+export const STARTING_TOKENS = 50;
+
 export const EMPTY_WALLET = {
   balance: 0,
   totalEarned: 0,
@@ -74,12 +77,21 @@ export function applyRefund(w, amount, label, now = Date.now()) {
   };
 }
 
+/** A brand-new wallet with the welcome bonus. Doesn't count toward the daily earning cap. */
+export function newWallet(now = Date.now()) {
+  return {
+    ...EMPTY_WALLET,
+    balance: STARTING_TOKENS,
+    history: [{ type: 'bonus', amount: STARTING_TOKENS, label: '🎁 Welcome bonus', ts: now }],
+  };
+}
+
 function load() {
   try {
     const raw = localStorage.getItem(KEY);
-    return raw ? { ...EMPTY_WALLET, ...JSON.parse(raw) } : EMPTY_WALLET;
+    return raw ? { ...EMPTY_WALLET, ...JSON.parse(raw) } : newWallet();
   } catch {
-    return EMPTY_WALLET;
+    return newWallet();
   }
 }
 
@@ -122,7 +134,7 @@ export function useWallet() {
   );
 
   const refund = useCallback((amount, label) => commit(applyRefund(ref.current, amount, label)), [commit]);
-  const reset = useCallback(() => commit(EMPTY_WALLET), [commit]);
+  const reset = useCallback(() => commit(newWallet()), [commit]);
 
   return { ...wallet, earnedToday: earnedTodayOf(wallet), earn, spend, refund, reset };
 }

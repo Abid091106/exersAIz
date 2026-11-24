@@ -15,8 +15,8 @@ export default function History({ history, totalEarned, onReset }) {
         ))}
       </ul>
       <button
-        className="link"
-        onClick={() => window.confirm('Reset all tokens and history?') && onReset()}
+        className="link" title="Start over with the welcome bonus"
+        onClick={() => window.confirm("Reset your wallet? You'll start again with the welcome bonus.") && onReset()}
       >
         Reset wallet
       </button>
