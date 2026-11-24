@@ -1,0 +1,31 @@
+{
+  "name": "exersaiz",
+  "version": "0.1.0",
+  "description": "Exercise in front of your webcam to earn credits. AI pose tracking counts your reps.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Abid091106/exersaiz.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Abid091106/exersaiz/issues"
+  },
+  "homepage": "https://github.com/Abid091106/exersaiz#readme",
+  "dependencies": {
+    "@mediapipe/tasks-vision": "^1.2.3",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^6.3.0",
+    "vite": "^8.3.8",
+    "vitest": "^5.1.1"
+  },
+  "private": true,
+  "type": "module"
+}
