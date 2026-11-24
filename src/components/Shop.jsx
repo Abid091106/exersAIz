@@ -27,7 +27,7 @@ export default function Shop({ balance, onSpend }) {
               <div className="reward-emoji">{r.emoji}</div>
               <div className="reward-name">{r.name}</div>
               <button className="primary" disabled={short > 0} onClick={() => buy(r)}>
-                {short > 0 ? `${short} more credits` : `Spend ${r.cost}`}
+                {short > 0 ? `${short} more tokens` : `Spend ${r.cost}`}
               </button>
             </div>
           );

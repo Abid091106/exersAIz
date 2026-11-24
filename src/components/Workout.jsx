@@ -3,7 +3,8 @@ import { EXERCISES } from '../pose/exercises.js';
 import { RepCounter } from '../pose/RepCounter.js';
 import { usePoseTracker } from '../pose/usePoseTracker.js';
 
-export default function Workout({ onEarn }) {
+export default function Workout({ onEarn, earnedToday, dailyCap }) {
+  const capReached = earnedToday >= dailyCap;
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const [exerciseId, setExerciseId] = useState('squat');
@@ -32,9 +33,10 @@ export default function Workout({ onEarn }) {
       const result = counterRef.current.update(ex.measure(landmarks, aspect));
       if (result.rep) {
         setReps(counterRef.current.reps);
-        setEarned((e) => e + ex.credits);
         setFlash((f) => f + 1);
-        onEarn(ex.credits, { exercise: ex.name, sessionId: sessionRef.current });
+        // Reps still count after the daily cap, they just stop paying out.
+        const granted = onEarn(ex.tokens, { exercise: ex.name, sessionId: sessionRef.current });
+        setEarned((e) => e + granted);
       }
       if (result.tip) {
         setTip(result.tip);
@@ -67,9 +69,21 @@ export default function Workout({ onEarn }) {
             className={ex.id === exerciseId ? 'chip active' : 'chip'}
             onClick={() => setExerciseId(ex.id)}
           >
-            {ex.emoji} {ex.name} <span className="muted">+{ex.credits}/rep</span>
+            {ex.emoji} {ex.name} <span className="muted">+{ex.tokens}/rep</span>
           </button>
         ))}
+      </div>
+
+      <div className="daily" aria-label="Tokens earned today">
+        <div className="daily-label">
+          <span>Earned today</span>
+          <span>
+            {earnedToday} / {dailyCap}
+          </span>
+        </div>
+        <div className="daily-bar">
+          <div style={{ width: `${Math.min(100, (earnedToday / dailyCap) * 100)}%` }} />
+        </div>
       </div>
 
       <div className="stage">
@@ -99,10 +113,13 @@ export default function Workout({ onEarn }) {
                 {reps}
                 <span>{exercise.name.toLowerCase()}</span>
               </div>
-              <div className="session-credits">+{earned} credits</div>
+              <div className="session-tokens">+{earned} tokens</div>
             </div>
             {!bodyFound && <div className="banner warn">Step back so your whole body is in view</div>}
-            {tip && <div className="banner tip">{tip}</div>}
+            {bodyFound && tip && <div className="banner tip">{tip}</div>}
+            {bodyFound && !tip && capReached && (
+              <div className="banner success">Daily limit reached. Reps still count, tokens resume tomorrow 💪</div>
+            )}
           </>
         )}
       </div>

@@ -14,7 +14,7 @@ export const EXERCISES = {
     id: 'squat',
     name: 'Squats',
     emoji: '🦵',
-    credits: 2,
+    tokens: 2,
     setup: 'Stand side-on or facing the camera, whole body in frame.',
     partialTip: 'Go lower — thighs to about parallel!',
     // Knee angle: ~175° standing, ~90° at the bottom of a good squat.
@@ -34,7 +34,7 @@ export const EXERCISES = {
     id: 'pushup',
     name: 'Push-ups',
     emoji: '💪',
-    credits: 3,
+    tokens: 3,
     setup: 'Side-on to the camera so it can see your arm bend.',
     partialTip: 'Lower your chest further!',
     // Elbow angle: ~170° arms locked out, ~80–90° at the bottom.
@@ -54,7 +54,7 @@ export const EXERCISES = {
     id: 'jumpingJack',
     name: 'Jumping jacks',
     emoji: '⭐',
-    credits: 1,
+    tokens: 1,
     setup: 'Face the camera, whole body in frame.',
     partialTip: 'Hands all the way up, feet out wide!',
     // "Openness" score from 0 (arms down, feet together) to 1 (star shape).

@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import Workout from './components/Workout.jsx';
+import Coach from './components/Coach.jsx';
 import Shop from './components/Shop.jsx';
 import History from './components/History.jsx';
-import { useWallet } from './lib/wallet.js';
+import { useWallet, DAILY_EARN_CAP } from './lib/wallet.js';
 
 const TABS = [
   { id: 'workout', label: '🏋️ Workout' },
+  { id: 'coach', label: '🤖 Coach' },
   { id: 'shop', label: '🎁 Spend' },
   { id: 'history', label: '📜 History' },
 ];
@@ -20,7 +22,7 @@ export default function App() {
         <h1>
           exers<span className="accent">AI</span>z
         </h1>
-        <div className="balance" aria-label="Credit balance">
+        <div className="balance" aria-label="Token balance">
           <span className="coin">🪙</span> {wallet.balance}
         </div>
       </header>
@@ -35,7 +37,10 @@ export default function App() {
 
       <main>
         {/* Leaving the Workout tab unmounts it, which stops the camera. */}
-        {tab === 'workout' && <Workout onEarn={wallet.earn} />}
+        {tab === 'workout' && (
+          <Workout onEarn={wallet.earn} earnedToday={wallet.earnedToday} dailyCap={DAILY_EARN_CAP} />
+        )}
+        {tab === 'coach' && <Coach wallet={wallet} dailyCap={DAILY_EARN_CAP} />}
         {tab === 'shop' && <Shop balance={wallet.balance} onSpend={wallet.spend} />}
         {tab === 'history' && (
           <History history={wallet.history} totalEarned={wallet.totalEarned} onReset={wallet.reset} />
