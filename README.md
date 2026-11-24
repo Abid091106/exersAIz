@@ -2,6 +2,10 @@
 
 **Sweat for your screen time.** exersAIz watches you exercise through your webcam, counts your reps with AI pose tracking, and pays you in credits you can spend on rewards.
 
+### ▶️ [Try it live](https://exers-ai-z.vercel.app/)
+
+Works best in Chrome or Edge on a laptop. Allow camera access when asked.
+
 ## How it works
 
 1. Pick an exercise: squats (+2/rep), push-ups (+3/rep) or jumping jacks (+1/rep).
