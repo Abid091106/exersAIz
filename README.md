@@ -1,0 +1,2 @@
+# exersAIz
+A hackathon project
