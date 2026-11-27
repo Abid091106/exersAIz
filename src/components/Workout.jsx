@@ -17,12 +17,18 @@ export default function Workout({ onEarn, earnedToday, dailyCap }) {
   const [tip, setTip] = useState(null);
   const [bodyFound, setBodyFound] = useState(false);
   const [flash, setFlash] = useState(0);
+  const [outOfPosition, setOutOfPosition] = useState(false);
+  const [view, setView] = useState(null);
   const tipTimer = useRef(0);
+  const badFrames = useRef(0);
 
   // Switching exercise starts a fresh counter.
   useEffect(() => {
     counterRef.current = new RepCounter(exercise);
+    badFrames.current = 0;
     setReps(0);
+    setOutOfPosition(false);
+    setView(null);
   }, [exercise]);
 
   const onPose = useCallback(
@@ -30,7 +36,16 @@ export default function Workout({ onEarn, earnedToday, dailyCap }) {
       setBodyFound((prev) => (prev === !!landmarks ? prev : !!landmarks));
       if (!landmarks) return;
       const ex = counterRef.current.exercise;
-      const result = counterRef.current.update(ex.measure(landmarks, aspect));
+      const value = ex.measure(landmarks, aspect);
+      const result = counterRef.current.update(value);
+
+      // Body visible but not in position (e.g. not in a plank) for ~1 second → show a hint.
+      badFrames.current = value == null ? badFrames.current + 1 : 0;
+      const off = Boolean(ex.positionTip) && badFrames.current > 30;
+      setOutOfPosition((prev) => (prev === off ? prev : off));
+      const v = ex.view?.(landmarks, aspect) ?? null;
+      setView((prev) => (prev === v ? prev : v));
+
       if (result.rep) {
         setReps(counterRef.current.reps);
         setFlash((f) => f + 1);
@@ -114,11 +129,15 @@ export default function Workout({ onEarn, earnedToday, dailyCap }) {
                   {reps}
                   <span>{exercise.name.toLowerCase()}</span>
                 </div>
-                <div className="session-tokens">+{earned} tokens</div>
+                <div className="hud-right">
+                  <div className="session-tokens">+{earned} tokens</div>
+                  {view && <div className="view-label">{view === 'side' ? 'side view' : 'front view'}</div>}
+                </div>
               </div>
               {!bodyFound && <div className="banner warn">Step back so your whole body is in view</div>}
-              {bodyFound && tip && <div className="banner tip">{tip}</div>}
-              {bodyFound && !tip && capReached && (
+              {bodyFound && outOfPosition && <div className="banner warn">{exercise.positionTip}</div>}
+              {bodyFound && !outOfPosition && tip && <div className="banner tip">{tip}</div>}
+              {bodyFound && !outOfPosition && !tip && capReached && (
                 <div className="banner success">Daily limit reached. Reps still count, tokens resume tomorrow 💪</div>
               )}
             </>

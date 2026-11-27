@@ -223,6 +223,8 @@ footer { font-size: 0.9rem; text-align: center; color: var(--pencil); }
   color: var(--green-pen);
   transform: rotate(2deg);
 }
+.hud-right { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+.view-label { background: var(--card); border: 2px dashed var(--ink); border-radius: var(--wobble-2); padding: 2px 10px; font-size: 0.85rem; color: var(--pencil); transform: rotate(-2deg); }
 .pop { animation: pop 0.35s ease-out; }
 @keyframes pop { 0% { transform: rotate(-3deg) scale(1.35); } 100% { transform: rotate(-3deg) scale(1); } }
 

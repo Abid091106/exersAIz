@@ -1,4 +1,5 @@
 import { LM, visible, sideAveragedAngle } from './geometry.js';
+import { pushupReading } from './pushup.js';
 
 /**
  * Each exercise turns a pose into one number (`measure`) and says which
@@ -35,19 +36,15 @@ export const EXERCISES = {
     name: 'Push-ups',
     emoji: '💪',
     tokens: 3,
-    setup: 'Side-on to the camera so it can see your arm bend.',
+    setup: 'Side-on to the camera (shoulders to knees in view), or facing it with the camera low in front of you.',
     partialTip: 'Lower your chest further!',
-    // Elbow angle: ~170° arms locked out, ~80–90° at the bottom.
-    measure: (lm, aspect) =>
-      sideAveragedAngle(
-        lm,
-        [LM.L_SHOULDER, LM.L_ELBOW, LM.L_WRIST],
-        [LM.R_SHOULDER, LM.R_ELBOW, LM.R_WRIST],
-        aspect
-      ),
-    isDown: (v) => v < 95,
-    isUp: (v) => v > 155,
-    isPartial: (v) => v < 130,
+    positionTip: 'Get into a plank, side-on or facing the camera',
+    // 1 = arms locked out, 0 = chest down. null when not in a push-up position (see pushup.js).
+    measure: (lm, aspect) => pushupReading(lm, aspect)?.value ?? null,
+    view: (lm, aspect) => pushupReading(lm, aspect)?.view ?? null,
+    isDown: (v) => v < 0.2,
+    isUp: (v) => v > 0.85,
+    isPartial: (v) => v < 0.6,
   },
 
   jumpingJack: {
