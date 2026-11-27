@@ -87,41 +87,43 @@ export default function Workout({ onEarn, earnedToday, dailyCap }) {
       </div>
 
       <div className="stage">
-        <video ref={videoRef} playsInline muted className="mirror" />
-        <canvas ref={canvasRef} className="mirror overlay" />
+        <div className="stage-inner">
+          <video ref={videoRef} playsInline muted className="mirror" />
+          <canvas ref={canvasRef} className="mirror overlay" />
 
-        {!running && (
-          <div className="stage-message">
-            {status === 'loading' ? (
-              <p>Loading camera and AI model…</p>
-            ) : (
-              <>
-                <p className="setup">{exercise.setup}</p>
-                {error && <p className="error">{error}</p>}
-                <button className="primary big" onClick={begin}>
-                  Start workout
-                </button>
-              </>
-            )}
-          </div>
-        )}
-
-        {running && (
-          <>
-            <div className="hud">
-              <div key={flash} className="rep-count pop">
-                {reps}
-                <span>{exercise.name.toLowerCase()}</span>
-              </div>
-              <div className="session-tokens">+{earned} tokens</div>
+          {!running && (
+            <div className="stage-message">
+              {status === 'loading' ? (
+                <p>Loading camera and AI model…</p>
+              ) : (
+                <>
+                  <p className="setup">{exercise.setup}</p>
+                  {error && <p className="error">{error}</p>}
+                  <button className="primary big" onClick={begin}>
+                    Start workout
+                  </button>
+                </>
+              )}
             </div>
-            {!bodyFound && <div className="banner warn">Step back so your whole body is in view</div>}
-            {bodyFound && tip && <div className="banner tip">{tip}</div>}
-            {bodyFound && !tip && capReached && (
-              <div className="banner success">Daily limit reached. Reps still count, tokens resume tomorrow 💪</div>
-            )}
-          </>
-        )}
+          )}
+
+          {running && (
+            <>
+              <div className="hud">
+                <div key={flash} className="rep-count pop">
+                  {reps}
+                  <span>{exercise.name.toLowerCase()}</span>
+                </div>
+                <div className="session-tokens">+{earned} tokens</div>
+              </div>
+              {!bodyFound && <div className="banner warn">Step back so your whole body is in view</div>}
+              {bodyFound && tip && <div className="banner tip">{tip}</div>}
+              {bodyFound && !tip && capReached && (
+                <div className="banner success">Daily limit reached. Reps still count, tokens resume tomorrow 💪</div>
+              )}
+            </>
+          )}
+        </div>
       </div>
 
       {running && (

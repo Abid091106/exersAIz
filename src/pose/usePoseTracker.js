@@ -76,8 +76,8 @@ export function usePoseTracker({ videoRef, canvasRef, onPose }) {
           ctx.clearRect(0, 0, canvas.width, canvas.height);
           const lm = result.landmarks?.[0];
           if (lm) {
-            draw.drawConnectors(lm, PoseLandmarker.POSE_CONNECTIONS, { color: '#7CFFB2', lineWidth: 4 });
-            draw.drawLandmarks(lm, { color: '#FFFFFF', fillColor: '#16a34a', radius: 4 });
+            draw.drawConnectors(lm, PoseLandmarker.POSE_CONNECTIONS, { color: '#1f4fbf', lineWidth: 5 });
+            draw.drawLandmarks(lm, { color: '#ffffff', fillColor: '#fff27a', lineWidth: 2, radius: 5 });
           }
           onPoseRef.current?.(lm ?? null, video.videoWidth / video.videoHeight);
         }
