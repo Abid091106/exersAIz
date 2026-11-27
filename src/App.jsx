@@ -4,6 +4,7 @@ import Coach from './components/Coach.jsx';
 import Shop from './components/Shop.jsx';
 import History from './components/History.jsx';
 import { useWallet, DAILY_EARN_CAP } from './lib/wallet.js';
+import { useTheme } from './lib/theme.js';
 
 const TABS = [
   { id: 'workout', label: '🏋️ Workout' },
@@ -14,6 +15,7 @@ const TABS = [
 
 export default function App() {
   const wallet = useWallet();
+  const { theme, toggle } = useTheme();
   const [tab, setTab] = useState('workout');
 
   return (
@@ -22,8 +24,18 @@ export default function App() {
         <h1>
           exers<span className="accent">AI</span>z
         </h1>
-        <div className="balance" aria-label="Token balance">
-          <span className="coin">🪙</span> {wallet.balance}
+        <div className="header-right">
+          <button
+            className="theme-toggle"
+            onClick={toggle}
+            aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+            title={theme === 'dark' ? 'Light mode' : 'Dark mode'}
+          >
+            {theme === 'dark' ? '☀️' : '🌙'}
+          </button>
+          <div className="balance" aria-label="Token balance">
+            <span className="coin">🪙</span> {wallet.balance}
+          </div>
         </div>
       </header>
 
